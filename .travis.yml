@@ -73,6 +73,7 @@ deploy:
     - ${TRAVIS_BUILD_DIR}/dist/*.AppImage
     - ${TRAVIS_BUILD_DIR}/dist/*.deb
     - ${TRAVIS_BUILD_DIR}/dist/*.rpm
+    - ${TRAVIS_BUILD_DIR}/dist/*.snap
   skip_cleanup: true
   draft: true
   tag_name: $TRAVIS_TAG
