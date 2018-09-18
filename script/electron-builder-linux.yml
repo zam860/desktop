@@ -37,7 +37,6 @@ snap:
   confinement: 'classic'
   stagePackages:
     - default
-    - git-core
-    - libcurl3-gnutls
+    - libcurl3
     - libsecret-1-0
     - openssh-client
