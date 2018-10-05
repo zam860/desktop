@@ -40,3 +40,5 @@ snap:
     - libcurl3
     - libsecret-1-0
     - openssh-client
+  plugs:
+    - password-manager-service
