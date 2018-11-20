@@ -5,11 +5,6 @@ notifications:
 
 dist: trusty
 
-sudo: false
-
-services:
-  - docker
-
 os: linux
 compiler: clang
 
@@ -54,23 +49,3 @@ script:
 
 after_failure:
   - yarn test:review
-
-after_success:
-  - docker run -v $(pwd):$(pwd) -t snapcore/snapcraft sh -c "cd $(pwd) &&
-    ./script/docker-package.sh"
-
-deploy:
-  provider: releases
-  api_key: $GITHUB_TOKEN
-  file_glob: true
-  file:
-    - ${TRAVIS_BUILD_DIR}/dist/*.yml
-    - ${TRAVIS_BUILD_DIR}/dist/*.AppImage
-    - ${TRAVIS_BUILD_DIR}/dist/*.deb
-    - ${TRAVIS_BUILD_DIR}/dist/*.rpm
-    - ${TRAVIS_BUILD_DIR}/dist/*.snap
-  skip_cleanup: true
-  draft: true
-  tag_name: $TRAVIS_TAG
-  on:
-    tags: true
