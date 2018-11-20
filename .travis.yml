@@ -5,11 +5,6 @@ notifications:
 
 dist: trusty
 
-sudo: false
-
-services:
-  - docker
-
 os: linux
 compiler: clang
 
