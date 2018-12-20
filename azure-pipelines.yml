@@ -11,6 +11,13 @@ resources:
       checkoutOptions:
         submodules: true
 
+trigger:
+  branches:
+    include:
+      - refs/heads/master
+      - refs/heads/linux
+      - refs/tags/*
+
 jobs:
   - job: Windows
     condition: eq(variables['BUILD_WINDOWS'], 'true')
