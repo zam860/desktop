@@ -19,16 +19,7 @@ RUN apt-get install --quiet --yes \
     libxss1 \
     libgconf-2-4 \
     libasound2 \
-    xvfb \
-    # packages required for electron-installer-debian
-    fakeroot \
-    dpkg \
-    # packages required for electron-installer-redhat
-    rpm \
-    # packages required for electron-installer-appimage
-    xz-utils \
-    xorriso \
-    zsync
+    xvfb
 
 # ensure we are running a recent version of Git
 RUN add-apt-repository ppa:git-core/ppa
