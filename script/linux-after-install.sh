@@ -4,8 +4,9 @@ set -e
 
 PROFILE_D_FILE="/etc/profile.d/github-desktop.sh"
 INSTALL_DIR="/opt/${productFilename}"
+SHELL_SCRIPT_PATH="$INSTALL_DIR/resources/app/static/"
 SCRIPT=$"#!/bin/sh
-export PATH=\"$INSTALL_DIR:\$PATH\""
+export PATH=\"$SHELL_SCRIPT_PATH:\$PATH\""
 
 case "$1" in
     configure)
