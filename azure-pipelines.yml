@@ -46,12 +46,12 @@ jobs:
         displayName: 'Publish Test Results'
         inputs:
           testResultsFiles: '**junit*.xml'
-          testRunTitle: TestRun ${{ parameters.name }} $(node_version)
+          testRunTitle: $(Agent.OS) Test Results
       - task: PublishCodeCoverageResults@1
         displayName: 'Publish code coverage results'
         inputs:
           codeCoverageTool: 'cobertura'
-          summaryFileLocation: '**/coverage/cobertura-coverage.xml'
+          summaryFileLocation: '**/app/coverage/cobertura-coverage.xml'
 
   - job: Linux
     condition: eq(variables['BUILD_LINUX'], 'true')
@@ -103,12 +103,12 @@ jobs:
         displayName: 'Publish Test Results'
         inputs:
           testResultsFiles: '**junit*.xml'
-          testRunTitle: TestRun ${{ parameters.name }} $(node_version)
+          testRunTitle: $(Agent.OS) Test Results
       - task: PublishCodeCoverageResults@1
         displayName: 'Publish code coverage results'
         inputs:
           codeCoverageTool: 'cobertura'
-          summaryFileLocation: '**/coverage/cobertura-coverage.xml'
+          summaryFileLocation: '**/app/coverage/cobertura-coverage.xml'
 
   - job: macOS
     condition: eq(variables['BUILD_MACOS'], 'true')
@@ -131,12 +131,12 @@ jobs:
         displayName: 'Publish Test Results'
         inputs:
           testResultsFiles: '**junit*.xml'
-          testRunTitle: TestRun ${{ parameters.name }} $(node_version)
+          testRunTitle: $(Agent.OS) Test Results
       - task: PublishCodeCoverageResults@1
         displayName: 'Publish code coverage results'
         inputs:
           codeCoverageTool: 'cobertura'
-          summaryFileLocation: '**/coverage/cobertura-coverage.xml'
+          summaryFileLocation: '**/app/coverage/cobertura-coverage.xml'
 
   - job: Lint
     pool:
@@ -157,3 +157,6 @@ jobs:
       - script: |
           yarn lint
         name: Lint
+      - script: |
+          yarn check-modified
+        displayName: 'Check for modified files'
