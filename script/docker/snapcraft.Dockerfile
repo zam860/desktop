@@ -1,5 +1,6 @@
 FROM snapcore/snapcraft
 
+RUN apt -qq update
 RUN apt -qq install --yes curl gnupg
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
