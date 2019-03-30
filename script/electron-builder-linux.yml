@@ -41,7 +41,7 @@ snap:
   confinement: 'classic'
   # workaround to prevent electron-builder from inserting default plugs
   # which prevents the package from being published correctly
-  plugs: []
+  plugs: null
   stagePackages:
     - default
     - libcurl3
