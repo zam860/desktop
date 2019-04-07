@@ -43,7 +43,7 @@ To upgrade manually, run these commands:
 
 ```
 $ snap remove github-desktop
-$ snap install --beta github-desktop
+$ snap install github-desktop --beta --classic
 ```
 
 ## Other Distributions
