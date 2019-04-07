@@ -36,7 +36,7 @@ $ snap install github-desktop --beta --classic`
           <p>
             As this channel will not be getting any further updates while we
             perform this transition,{' '}
-            <strong>we recomend upgrading as soon as possible</strong> to get
+            <strong>we recommend upgrading as soon as possible</strong> to get
             the latest Desktop builds.
           </p>
         </DialogContent>
