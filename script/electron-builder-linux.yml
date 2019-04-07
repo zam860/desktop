@@ -11,6 +11,7 @@ linux:
     - rpm
     - snap
     - AppImage
+    - pacman
   maintainer: 'GitHub, Inc <opensource+desktop@github.com>'
 deb:
   afterInstall: './script/linux-after-install.sh'
@@ -27,6 +28,12 @@ deb:
     - libcurl3 | libcurl4
     # keytar dependencies
     - libsecret-1-0
+pacman:
+  depends:
+    - libsecret
+    - curl
+    - libxss
+    - gconf
 rpm:
   depends:
     # default Electron dependencies
