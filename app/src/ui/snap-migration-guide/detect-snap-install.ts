@@ -15,7 +15,13 @@ export async function detectSnapInstall(): Promise<boolean> {
       const hasDisableGPUCompositing =
         process.argv.indexOf('--disable-gpu-compositing') >= 0
 
-      resolve(installedSnap && hasDisableGPUCompositing)
+      const isSnapEdgeInstall = installedSnap && hasDisableGPUCompositing
+
+      log.info(
+        `[detectSnapInstall] got '${installedSnap}' and '${hasDisableGPUCompositing}' when looking at running app`
+      )
+
+      resolve(isSnapEdgeInstall)
     } catch {
       resolve(false)
     }
