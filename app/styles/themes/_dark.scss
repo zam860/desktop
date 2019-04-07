@@ -316,6 +316,9 @@ body.theme-dark {
   --notification-banner-background: #{$gray-800};
   --notification-banner-border-color: #{$gray-700};
   --notification-ref-background: #{$gray-700};
+
+  /** Snap migration color change */
+  --code-snippet-background: #{$gray-800};
 }
 
 // this emulates the cursor for the co-author input because it isn't exactly
