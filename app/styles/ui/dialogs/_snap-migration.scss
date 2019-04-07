@@ -2,5 +2,6 @@
   .commands {
     padding: var(--spacing-third);
     background: var(--code-snippet-background);
+    user-select: text;
   }
 }
