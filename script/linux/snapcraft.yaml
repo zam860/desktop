@@ -3,11 +3,11 @@ version: '2.1.1-linux1'
 summary: GitHub Desktop
 description: |
   Simple collaboration from your desktop
-grade: beta
+grade: stable
 confinement: classic
 
 apps:
-  githubDesktop:
+  github-desktop:
     command: bin/electron-launch $SNAP/usr/lib/github-desktop/github-desktop
     desktop: usr/share/applications/github-desktop.desktop
     # Correct the TMPDIR path for Chromium Framework/Electron to ensure
@@ -17,7 +17,7 @@ apps:
       DISABLE_WAYLAND: 1
 
 parts:
-  githubDesktop:
+  github-desktop:
     plugin: dump
     source: github-desktop-2.1.1-linux1.deb
     source-type: deb
@@ -42,5 +42,5 @@ parts:
   electron-launch:
     plugin: dump
     source: files/
-    prepare: |
+    override-build: |
       chmod +x bin/electron-launch
