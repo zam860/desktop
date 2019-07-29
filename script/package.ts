@@ -218,34 +218,30 @@ async function buildSnapPackage() {
   await fs.copy(installerSource, installerDestination)
 }
 
-function generateChecksums() {
+async function generateChecksums() {
   const distRoot = getDistRoot()
 
   const installersPath = `${distRoot}/GitHubDesktop-linux-*`
 
-  glob(installersPath, async (error, files) => {
-    if (error != null) {
-      throw error
-    }
+  const files = glob.sync(installersPath)
 
-    const checksums = new Map<string, string>()
+  const checksums = new Map<string, string>()
 
-    for (const f of files) {
-      const checksum = await getSha256Checksum(f)
-      checksums.set(f, checksum)
-    }
+  for (const f of files) {
+    const checksum = await getSha256Checksum(f)
+    checksums.set(f, checksum)
+  }
 
-    let checksumsText = `Checksums: \n`
+  let checksumsText = `Checksums: \n`
 
-    for (const [fullPath, checksum] of checksums) {
-      const fileName = path.basename(fullPath)
-      checksumsText += `${checksum} - ${fileName}\n`
-    }
+  for (const [fullPath, checksum] of checksums) {
+    const fileName = path.basename(fullPath)
+    checksumsText += `${checksum} - ${fileName}\n`
+  }
 
-    const checksumFile = path.join(distRoot, 'checksums.txt')
+  const checksumFile = path.join(distRoot, 'checksums.txt')
 
-    fs.writeFile(checksumFile, checksumsText)
-  })
+  await fs.writeFile(checksumFile, checksumsText)
 }
 
 async function packageLinux() {
@@ -276,5 +272,5 @@ async function packageLinux() {
 
   await buildSnapPackage()
 
-  generateChecksums()
+  await generateChecksums()
 }
