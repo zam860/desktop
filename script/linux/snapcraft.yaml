@@ -42,5 +42,3 @@ parts:
   electron-launch:
     plugin: dump
     source: files/
-    override-build: |
-      chmod +x bin/electron-launch
