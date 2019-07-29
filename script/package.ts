@@ -6,7 +6,7 @@ import * as path from 'path'
 import * as crypto from 'crypto'
 import * as electronInstaller from 'electron-winstaller'
 import * as glob from 'glob'
-import * as YAML from 'yaml'
+import * as OS from 'os'
 const rimraf = require('rimraf')
 
 import { getProductName, getCompanyName, getVersion } from '../app/package-info'
@@ -147,52 +147,54 @@ function getSha256Checksum(fullPath: string): Promise<string> {
   })
 }
 
-function throwIfError(command: string, args: string[]) {
-  const { error } = cp.spawnSync(command, args, { stdio: 'inherit' })
+async function buildSnapPackage() {
+  const sourceDir = path.join(__dirname, 'linux')
+  const distDir = getDistRoot()
 
+  // create temp directory
+  const tmpDir = path.join(OS.tmpdir(), 'desktop-snap-dir')
+
+  const exists = await fs.pathExists(tmpDir)
+  if (exists) {
+    rimraf.sync(tmpDir)
+  }
+
+  await fs.mkdirp(tmpDir)
+
+  // copy snapcraft.yml into $temp
+  await fs.copy(
+    path.join(sourceDir, 'snapcraft.yml'),
+    path.join(tmpDir, 'snapcraft.yml')
+  )
+
+  // copy deb into $temp
+  const debInstallerPath = path.join(
+    distDir,
+    `GitHubDesktop-linux-${getVersion()}.deb`
+  )
+  await fs.copy(path.join(debInstallerPath), path.join(tmpDir))
+
+  // copy electron-launch into `$temp/files/bin`
+  const launchFileDestination = path.join(tmpDir, 'files', 'bin')
+  await fs.mkdirp(launchFileDestination)
+  await fs.copy(
+    path.join(sourceDir, 'electron-launch'),
+    path.join(launchFileDestination, 'electron-launch')
+  )
+
+  //spawn snapcraft tooling
+  const { error } = cp.spawnSync('snapcraft', { stdio: 'inherit', cwd: tmpDir })
   if (error != null) {
     throw error
   }
-}
 
-function workaroundForSnapPackage() {
-  const distRoot = getDistRoot()
-
-  const snapArchive = path.join(
-    distRoot,
+  // move snap into dist output directory
+  const installerSource = path.join(
+    tmpDir,
     `GitHubDesktop-linux-${getVersion()}.snap`
   )
-  const snapFileSystem = path.join(distRoot, 'unsquashfs-root')
 
-  throwIfError('unsquashfs', [
-    '-dest',
-    snapFileSystem,
-    '-no-progress',
-    snapArchive,
-  ])
-
-  const snapMetaYaml = path.join(snapFileSystem, 'meta', 'snap.yaml')
-
-  const yamlText = fs.readFileSync(snapMetaYaml, 'utf8')
-  const yaml = YAML.parse(yamlText)
-
-  // regenerate the YAML without whatever electron-builder has included for the plugs
-  // element, because a package using the strict enclosure should not define this
-  const yamlWithoutPlugs = {
-    ...yaml,
-    apps: {
-      'github-desktop': {
-        command: 'command.sh',
-      },
-    },
-  }
-
-  const newYaml = YAML.stringify(yamlWithoutPlugs)
-  fs.writeFileSync(snapMetaYaml, newYaml, 'utf8')
-
-  throwIfError('snapcraft', ['pack', snapFileSystem, '--output', snapArchive])
-
-  rimraf.sync(snapFileSystem)
+  await fs.move(installerSource, getDistRoot())
 }
 
 function generateChecksums() {
@@ -251,7 +253,7 @@ function packageLinux() {
     throw error
   }
 
-  workaroundForSnapPackage()
+  buildSnapPackage()
 
   generateChecksums()
 }
