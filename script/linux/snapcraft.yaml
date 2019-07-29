@@ -19,7 +19,7 @@ apps:
 parts:
   github-desktop:
     plugin: dump
-    source: github-desktop-2.1.1-linux1.deb
+    source: GitHubDesktop-linux-2.1.0-linux1.deb
     source-type: deb
     after:
       - desktop-gtk3
