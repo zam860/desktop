@@ -248,7 +248,7 @@ function generateChecksums() {
   })
 }
 
-function packageLinux() {
+async function packageLinux() {
   const electronBuilder = path.resolve(
     __dirname,
     '..',
@@ -274,7 +274,7 @@ function packageLinux() {
     throw error
   }
 
-  buildSnapPackage()
+  await buildSnapPackage()
 
   generateChecksums()
 }
