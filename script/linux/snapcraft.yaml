@@ -1,5 +1,6 @@
 name: github-desktop
-version: '2.1.1-linux1'
+# TODO: this needs to be derived from the version in source
+version: '2.1.0-linux1'
 summary: GitHub Desktop
 description: |
   Simple collaboration from your desktop

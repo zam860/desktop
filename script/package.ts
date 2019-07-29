@@ -206,7 +206,7 @@ async function buildSnapPackage() {
   const installerExists = await fs.pathExists(installerSource)
   if (!installerExists) {
     throw new Error(
-      'Snap was not created at expected location, check what happened'
+      `Snap was not created at expected location: ${installerSource}`
     )
   }
 
