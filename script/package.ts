@@ -6,7 +6,6 @@ import * as path from 'path'
 import * as crypto from 'crypto'
 import * as electronInstaller from 'electron-winstaller'
 import * as glob from 'glob'
-import * as OS from 'os'
 const rimraf = require('rimraf')
 
 import { getProductName, getCompanyName, getVersion } from '../app/package-info'
@@ -152,19 +151,23 @@ async function buildSnapPackage() {
   const distDir = getDistRoot()
 
   // create temp directory
-  const tmpDir = path.join(OS.tmpdir(), 'desktop-snap-dir')
+  const tmpDir = path.join(getDistRoot(), 'temp', 'desktop-snap-dir')
+
+  // TODO: handle missing directory/dirty directory/other states that Docker isn't wild about right now
 
   const exists = await fs.pathExists(tmpDir)
   if (exists) {
+    console.log(`cleaning up old directory: ${tmpDir}`)
     rimraf.sync(tmpDir)
   }
 
+  console.log(`creating temp directory: ${tmpDir}`)
   await fs.mkdirp(tmpDir)
 
   // copy snapcraft.yml into $temp
   await fs.copy(
-    path.join(sourceDir, 'snapcraft.yml'),
-    path.join(tmpDir, 'snapcraft.yml')
+    path.join(sourceDir, 'snapcraft.yaml'),
+    path.join(tmpDir, 'snap', 'snapcraft.yaml')
   )
 
   // copy deb into $temp
@@ -172,7 +175,11 @@ async function buildSnapPackage() {
     distDir,
     `GitHubDesktop-linux-${getVersion()}.deb`
   )
-  await fs.copy(path.join(debInstallerPath), path.join(tmpDir))
+  const debInstallerDestination = path.join(
+    tmpDir,
+    `GitHubDesktop-linux-${getVersion()}.deb`
+  )
+  await fs.copy(debInstallerPath, debInstallerDestination)
 
   // copy electron-launch into `$temp/files/bin`
   const launchFileDestination = path.join(tmpDir, 'files', 'bin')
@@ -183,6 +190,8 @@ async function buildSnapPackage() {
   )
 
   //spawn snapcraft tooling
+  console.log(`spawn snapcraft tooling at: ${tmpDir}`)
+
   const { error } = cp.spawnSync('snapcraft', { stdio: 'inherit', cwd: tmpDir })
   if (error != null) {
     throw error
@@ -194,7 +203,19 @@ async function buildSnapPackage() {
     `GitHubDesktop-linux-${getVersion()}.snap`
   )
 
-  await fs.move(installerSource, getDistRoot())
+  const installerExists = await fs.pathExists(installerSource)
+  if (!installerExists) {
+    throw new Error(
+      'Snap was not created at expected location, check what happened'
+    )
+  }
+
+  const installerDestination = path.join(
+    getDistRoot(),
+    `GitHubDesktop-linux-${getVersion()}.snap`
+  )
+
+  await fs.copy(installerSource, installerDestination)
 }
 
 function generateChecksums() {
