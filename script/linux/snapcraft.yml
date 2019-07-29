@@ -1,0 +1,46 @@
+name: github-desktop
+version: '2.1.1-linux1'
+summary: GitHub Desktop
+description: |
+  Simple collaboration from your desktop
+grade: beta
+confinement: classic
+
+apps:
+  githubDesktop:
+    command: bin/electron-launch $SNAP/usr/lib/github-desktop/github-desktop
+    desktop: usr/share/applications/github-desktop.desktop
+    # Correct the TMPDIR path for Chromium Framework/Electron to ensure
+    # libappindicator has readable resources.
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+      DISABLE_WAYLAND: 1
+
+parts:
+  githubDesktop:
+    plugin: dump
+    source: github-desktop-2.1.1-linux1.deb
+    source-type: deb
+    after:
+      - desktop-gtk3
+    stage-packages:
+      - libasound2
+      - libgconf2-4
+      - libnotify4
+      - libnspr4
+      - libnss3
+      - libpcre3
+      - libpulse0
+      - libxss1
+      - libxtst6
+      # dugite-specific dependencies
+      - libcurl3
+      - openssh-client
+      - gettext
+      # Desktop-specific dependencies
+      - libsecret-1-0
+  electron-launch:
+    plugin: dump
+    source: files/
+    prepare: |
+      chmod +x bin/electron-launch
