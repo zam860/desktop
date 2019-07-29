@@ -200,7 +200,7 @@ async function buildSnapPackage() {
   // move snap into dist output directory
   const installerSource = path.join(
     tmpDir,
-    `GitHubDesktop-linux-${getVersion()}.snap`
+    `github-desktop_${getVersion()}_amd64.snap`
   )
 
   const installerExists = await fs.pathExists(installerSource)
