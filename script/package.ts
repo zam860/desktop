@@ -205,6 +205,7 @@ async function buildSnapPackage() {
 
   const installerExists = await fs.pathExists(installerSource)
   if (!installerExists) {
+    rimraf.sync(tmpDir)
     throw new Error(
       `Snap was not created at expected location: ${installerSource}`
     )
@@ -216,6 +217,8 @@ async function buildSnapPackage() {
   )
 
   await fs.copy(installerSource, installerDestination)
+
+  rimraf.sync(tmpDir)
 }
 
 async function generateChecksums() {
