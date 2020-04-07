@@ -5,6 +5,7 @@ import * as path from 'path'
 import * as cp from 'child_process'
 import * as fs from 'fs-extra'
 import * as packager from 'electron-packager'
+const rimraf = require('rimraf')
 
 import { externals } from '../app/webpack.common'
 
@@ -60,7 +61,21 @@ const isDevelopmentBuild = getChannel() === 'development'
 console.log(`Building for ${getChannel()}…`)
 
 console.log('Removing old distribution…')
-fs.removeSync(getDistRoot())
+const distRoot = getDistRoot()
+if (fs.pathExists(distRoot)) {
+  const files = fs.readdirSync(distRoot)
+  for (const file of files) {
+    const p = path.join(distRoot, file)
+    const stat = fs.lstatSync(p)
+    if (stat.isDirectory()) {
+      rimraf.sync(p)
+    } else {
+      fs.unlinkSync(path.join(distRoot, file))
+    }
+
+    fs.unlinkSync(path.join(distRoot, file))
+  }
+}
 
 console.log('Copying dependencies…')
 copyDependencies()
