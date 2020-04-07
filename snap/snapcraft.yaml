@@ -1,0 +1,48 @@
+name: github-desktop
+version: 2.5.0
+summary: Simple collaboration from your desktop
+description: |
+  Simple collaboration from your desktop. Simple collaboration from your desktop.
+  Simple collaboration from your desktop. Simple collaboration from your desktop.
+  Simple collaboration from your desktop.
+
+grade: stable
+confinement: classic
+
+parts:
+  #gnome:
+  #  plugin: nil
+  #  build-packages:
+  #    - software-properties-common
+  #  override-pull: |
+  #    add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
+  #    apt -y update
+  github-desktop:
+    #after:
+    #  - gnome
+    plugin: dump
+    source: ./dist/github-desktop-linux-x64
+    stage-packages:
+      - fcitx-frontend-gtk3
+      - gvfs-libs
+      - libasound2
+      - libgconf-2-4
+      - libglib2.0-bin
+      - libgnome-keyring0
+      - libgtk-3-0
+      - libnotify4
+      - libnspr4
+      - libnss3
+      - libpcre3
+      - libpulse0
+      - libsecret-1-0
+      - libxss1
+      - libxtst6
+      - zlib1g
+
+apps:
+  github-desktop:
+    command: electron-launch $SNAP/usr/share/github-desktop/bin/github-desktop
+    common-id: github-desktop.desktop
+    environment:
+      DISABLE_WAYLAND: 1
