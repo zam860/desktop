@@ -7,7 +7,7 @@ linux:
     - x-scheme-handler/x-github-client
     - x-scheme-handler/x-github-desktop-auth
   target:
-    - AppImage
+    - snap
   maintainer: 'GitHub, Inc <opensource+desktop@github.com>'
 rpm:
   depends:

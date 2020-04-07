@@ -6,7 +6,6 @@ mkdir -p /tmp/local/.cache
 mkdir -p /tmp/local/.node-gyp
 mkdir -p /tmp/local/.local
 
-
 docker build . -t desktop-linux-snapcraft
 
 docker run \
