@@ -72,8 +72,6 @@ if (fs.pathExists(distRoot)) {
     } else {
       fs.unlinkSync(path.join(distRoot, file))
     }
-
-    fs.unlinkSync(path.join(distRoot, file))
   }
 }
 
