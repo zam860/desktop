@@ -12,4 +12,5 @@ docker run \
   -v /tmp/local/.cache:/usr/local/share/.cache \
   -v /tmp/local/.node-gyp:/.node-gyp \
   -v /tmp/local/.local:/.local \
+  -e CIRCLE_SHA1=$(git rev-parse HEAD) \
   desktop-linux-snapcraft
